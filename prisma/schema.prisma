@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
+  email                 String  @unique
+  password              String
+  role                  String
+  fullname              String
+  avatarUrl             String?
+  isEmailVerificated    Boolean @default(false)
+  emailVerificationCode String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  circles UserCircleRelation[]
+}
+
+model Circle {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  slug     String @unique
+  currency String @default("$")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  users UserCircleRelation[]
+
+  Cycle Cycle[]
+}
+
+model UserCircleRelation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  circleId String @db.ObjectId
+  circle   Circle @relation(fields: [userId], references: [id])
+}
+
+model Cycle {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  slug String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  circleId String @db.ObjectId
+  circle   Circle @relation(fields: [circleId], references: [id])
+
+  Expense Expense[]
+}
+
+model Expense {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  amount      Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  cycleId String @db.ObjectId
+  cycle   Cycle  @relation(fields: [cycleId], references: [id])
+}
