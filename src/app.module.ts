@@ -13,7 +13,9 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule, 
     PrismaModule, 
     UserModule,
-    ConfigModule.forRoot()
+    ConfigModule.forRoot({
+      isGlobal: true,
+    })
   ],
   providers: [
     {

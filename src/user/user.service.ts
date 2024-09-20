@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RegisterDTO } from 'src/auth/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash, compare } from 'bcryptjs';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,28 @@ export class UserService {
         email
       }
     })
+  }
+
+  async GetById(id : string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        id
+      }
+    })
+  }
+
+  async Verify(email: string, password: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    if (!user) {
+      return null;
+    }
+    const isMatch = await compare(password, user.password);
+    if (isMatch) {
+      return user;
+    }
+    return null;
   }
 
 }

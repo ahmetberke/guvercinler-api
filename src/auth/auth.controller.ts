@@ -1,8 +1,11 @@
-import { Body, Controller, HttpException, HttpStatus, Post, Response } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Response, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginDTO, RegisterDTO } from './auth.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/decorators';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -27,6 +30,12 @@ export class AuthController {
   @Post('register')
   async register(@Body() body: RegisterDTO) {
     return await this.userService.Create(body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async me(@CurrentUser() user : User) {
+    return user
   }
 
 }
