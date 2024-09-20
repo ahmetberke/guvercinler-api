@@ -26,6 +26,7 @@ model User {
   updatedAt DateTime @default(now())
 
   circles UserCircleRelation[]
+  invites Invite[]
 }
 
 model Circle {
@@ -38,8 +39,9 @@ model Circle {
   updatedAt DateTime @default(now())
 
   users UserCircleRelation[]
+  invites Invite[]
 
-  Cycle Cycle[]
+  cycles Cycle[]
 }
 
 model UserCircleRelation {
@@ -79,4 +81,22 @@ model Expense {
 
   cycleId String @db.ObjectId
   cycle   Cycle  @relation(fields: [cycleId], references: [id])
+}
+
+model Invite {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+
+  email String
+  token String @unique
+  isUsed Boolean @default(false)
+  acceptedAt DateTime?
+
+  createdUserId String @db.ObjectId
+  createdUser User @relation(fields: [createdUserId], references: [id])
+
+  circleId String @db.ObjectId
+  circle Circle @relation(fields: [circleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

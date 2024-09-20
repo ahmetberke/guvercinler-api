@@ -1,9 +1,22 @@
 import { Module } from '@nestjs/common';
-import { CircleService } from './circle.service';
-import { CircleController } from './circle.controller';
+import { CircleService } from './services/circle.service';
+import { CircleController, InviteController } from './controllers';
+import { InviteService } from './services';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  providers: [CircleService],
-  controllers: [CircleController]
+  imports: [
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // ConfigModule'u ekleyin
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET_KEY'), // .env dosyasından al
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') }, // Süreyi al
+      }),
+      inject: [ConfigService], // ConfigService'i enjekte edin
+    }),
+  ],
+  providers: [CircleService, InviteService],
+  controllers: [CircleController, InviteController]
 })
 export class CircleModule {}
