@@ -6,12 +6,14 @@ import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './filters/exceptions.filter';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     AuthModule, 
     PrismaModule, 
-    UserModule
+    UserModule,
+    ConfigModule.forRoot()
   ],
   providers: [
     {
