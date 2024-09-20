@@ -51,7 +51,7 @@ model UserCircleRelation {
   role String
 
   circleId String @db.ObjectId
-  circle   Circle @relation(fields: [userId], references: [id])
+  circle   Circle @relation(fields: [circleId], references: [id])
 }
 
 model Cycle {

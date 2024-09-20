@@ -7,6 +7,7 @@ import * as path from 'path';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './filters/exceptions.filter';
 import { ConfigModule } from '@nestjs/config';
+import { CircleModule } from './circle/circle.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { ConfigModule } from '@nestjs/config';
     UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
-    })
+    }),
+    CircleModule,
   ],
   providers: [
     {
