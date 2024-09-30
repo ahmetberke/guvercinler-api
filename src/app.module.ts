@@ -8,6 +8,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './filters/exceptions.filter';
 import { ConfigModule } from '@nestjs/config';
 import { CircleModule } from './circle/circle.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CircleModule } from './circle/circle.module';
       isGlobal: true,
     }),
     CircleModule,
+    MailModule,
   ],
   providers: [
     {

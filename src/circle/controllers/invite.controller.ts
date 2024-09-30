@@ -7,7 +7,7 @@ import { CircleGuard } from 'src/guards';
 import { CurrentCircleID } from 'src/decorators/current-circle.decorator';
 import { JwtService } from '@nestjs/jwt';
 
-@Controller('circles/invites')
+@Controller('invites')
 export class InviteController {
 
   constructor(
@@ -26,7 +26,7 @@ export class InviteController {
     return this.inviteService.Create(invite.email, user.id, circleId)
   }
 
-  @Get("/accept/:token")
+  @Get("/:token/accept")
   async acceptInvite(@Param() params : {token: string}, @Headers("Authorization") authString : string | undefined) {
     
     const authToken = authString?.split(" ")[1] || ""

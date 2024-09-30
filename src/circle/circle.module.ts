@@ -4,6 +4,7 @@ import { CircleController, InviteController } from './controllers';
 import { InviteService } from './services';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService], // ConfigService'i enjekte edin
     }),
+    MailModule
   ],
   providers: [CircleService, InviteService],
   controllers: [CircleController, InviteController]

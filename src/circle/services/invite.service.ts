@@ -3,11 +3,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CircleDTO } from '../dto/circle.dto';
 import { Circle, Invite } from '@prisma/client';
 import slugify from 'slugify';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class InviteService {
   constructor(
-    private prisma : PrismaService
+    private prisma : PrismaService,
+    private mailService: MailService
   ){}
 
   async Create(email: string, userId: string, circleId: string) {
@@ -29,8 +31,14 @@ export class InviteService {
       if (checkRelation) throw new HttpException("The user is already in this circle", HttpStatus.BAD_REQUEST)
     }
 
+    const invitedCircle = await this.prisma.circle.findUnique({
+      where: {
+        id: circleId
+      }
+    })
+
     const token = this.generateInviteToken(32)
-    return await this.prisma.invite.create({
+    const invite = await this.prisma.invite.create({
       data: {
         email,
         createdUserId: userId,
@@ -38,6 +46,15 @@ export class InviteService {
         token
       }
     })
+    
+    this.mailService.sendHtml(
+      email, 
+      `${invitedCircle.name} Circle Invite`, 
+      `Please <a href="${process.env.CLIENT_URL + "/auth/invite?token=" + token}">Click Here</a> for attend to ${invitedCircle.name}`
+    )
+
+    return invite
+
   }
 
   async GetByTokenAndEmail(token : string, email: string) : Promise<Invite> {
