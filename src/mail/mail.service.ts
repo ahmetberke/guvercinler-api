@@ -11,7 +11,7 @@ export class MailService {
   constructor() {
     this.email = process.env.GMAIL_EMAIL;
     this.mailToken = process.env.GMAIL_TOKEN;
-    this.info = `Güvercinler Bilgilendirme <${this.email}>`;
+    this.info = `Guvercinler Info <${this.email}>`;
 
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
