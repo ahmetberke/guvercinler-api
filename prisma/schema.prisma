@@ -20,7 +20,7 @@ model User {
   fullname              String
   avatarUrl             String?
   isEmailVerificated    Boolean @default(false)
-  emailVerificationCode String?
+  emailVerificationCode Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

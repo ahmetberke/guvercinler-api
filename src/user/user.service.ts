@@ -3,22 +3,28 @@ import { RegisterDTO } from 'src/auth/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash, compare } from 'bcryptjs';
 import { User } from '@prisma/client';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserService {
 
   constructor(
-    private prisma: PrismaService
+    private prisma: PrismaService,
+    private mailService: MailService
   ){}
 
   async Create(data : RegisterDTO) {
+    const emailVerificationCode = this.generateVerificationCode();
     const password = await hash(data.password, 10);
-    return await this.prisma.user.create({
+    const createdUser= await this.prisma.user.create({
       data: {
         ...data,
         password: password,
+        emailVerificationCode
       }
     })
+    this.mailService.sendHtml(data.email, "Email Verification", `Code: ${emailVerificationCode}`)
+    return createdUser
   }
 
   async GetByEmail(email: string) {
@@ -49,6 +55,10 @@ export class UserService {
       return user;
     }
     return null;
+  }
+
+  generateVerificationCode() {
+    return Math.floor(Math.random() * 100000)
   }
 
 }
