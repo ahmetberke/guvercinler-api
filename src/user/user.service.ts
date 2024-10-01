@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { RegisterDTO } from 'src/auth/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash, compare } from 'bcryptjs';
@@ -55,6 +55,23 @@ export class UserService {
       return user;
     }
     return null;
+  }
+
+  async EmailVerify(email: string, code: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: email
+      }
+    })
+    if (user.emailVerificationCode !== code) throw new HttpException("Wrong email verification code", HttpStatus.BAD_REQUEST);
+    await this.prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        isEmailVerificated: true
+      }
+    });
   }
 
   generateVerificationCode() {

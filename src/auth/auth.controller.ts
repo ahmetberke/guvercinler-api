@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Post, Response, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { LoginDTO, RefreshTokenDTO, RegisterDTO } from './auth.dto';
+import { EmailVerificateDTO, LoginDTO, RefreshTokenDTO, RegisterDTO } from './auth.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
@@ -41,6 +41,15 @@ export class AuthController {
   @Post('refresh')
   async refresh(@Body() body: RefreshTokenDTO) {
     return await this.authService.refreshToken(body.refreshToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('email-verificate')
+  async emailVerificate(@CurrentUser() user : User, @Body() body: EmailVerificateDTO) {
+    await this.userService.EmailVerify(user.email, body.code)
+    return {
+      success: true
+    } 
   }
 
 }

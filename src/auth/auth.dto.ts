@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsString, IsStrongPassword, Length, Matches } from "class-validator";
+import { IsEmail, IsNumber, IsString, IsStrongPassword, Length, Matches } from "class-validator";
 
 export class LoginDTO {
   @IsEmail()
@@ -33,4 +33,10 @@ export class RefreshTokenDTO {
     message: 'refresh token only can be hex decimal',
   })
   refreshToken: string
+}
+
+export class EmailVerificateDTO {
+  @ApiProperty()
+  @IsNumber()
+  code: number
 }
