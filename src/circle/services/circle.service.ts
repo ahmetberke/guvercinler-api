@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CircleDTO } from '../dto/circle.dto';
 import { Circle } from '@prisma/client';
-import slugify from 'slugify';
+import { slugify } from 'src/utils/slugify';
 
 @Injectable()
 export class CircleService {

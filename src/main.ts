@@ -26,6 +26,7 @@ async function bootstrap() {
       );
       return new BadRequestException(messages);
     },
+    transform: true
   }));
 
   app.useGlobalFilters(new AllExceptionsFilter())

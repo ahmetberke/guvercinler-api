@@ -11,6 +11,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     let status: number;
     let message: string;
+
+    console.log(exception)
     
     if (exception instanceof PrismaClientKnownRequestError) {
       if (exception.code === 'P2002') {

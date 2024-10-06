@@ -32,6 +32,7 @@
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "class-validator-mongo-object-id": "^1.4.0",
     "i18n": "^0.15.1",
     "nestjs-i18n": "^10.4.9",
     "nodemailer": "^6.9.15",

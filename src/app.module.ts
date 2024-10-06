@@ -9,6 +9,7 @@ import { AllExceptionsFilter } from './filters/exceptions.filter';
 import { ConfigModule } from '@nestjs/config';
 import { CircleModule } from './circle/circle.module';
 import { MailModule } from './mail/mail.module';
+import { CycleModule } from './cycle/cycle.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MailModule } from './mail/mail.module';
     }),
     CircleModule,
     MailModule,
+    CycleModule,
   ],
   providers: [
     {
